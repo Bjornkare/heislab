@@ -5,7 +5,14 @@
 #include "elev.h"
 #include "timer.h"
 #include "stdio.h"
+#include "order_hander.h"
 
+typedef struct {
+  state active_state;
+  int curr_dir;
+  int curr_floor;
+  int orders[N_FLOORS][N_BUTTONS];
+} fsm_data;
 
 typedef enum states{
   IDLE,
@@ -54,10 +61,4 @@ void fsm_evt_stop_button_pressed();
  */
 void fsm_evt_stop_button_released();
 
-bool check_for_stop(int floor, tag_elev_motor_direction dir);
-
 void door_timer();
-
-void add_order(int floor, int button);
-
-void remove_order(int floor, int button);
