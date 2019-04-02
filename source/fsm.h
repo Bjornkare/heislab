@@ -1,9 +1,11 @@
 #inclide <stdio.h>
-#include <time.h>
+#include "fsm.h"
 #include "io.h"
 #include "channels.h"
-#include "stdio.h"
 #include "elev.h"
+#include "timer.h"
+#include "stdio.h"
+
 
 typedef enum states{
   IDLE,
@@ -20,6 +22,9 @@ enum events{
   ORDER
 } event;
 
+int orders[N_FLOORS][N_BUTTONS];
+int last_floor;
+
 /**
  * Initialize the state machine to a defined state
  */
@@ -29,7 +34,7 @@ void fsm_init();
  * Event
  * Begin to complete any potential orders
  */
-int fsm_evt_order(int *floor);
+int fsm_evt_order(int floor, elev_button_type_t dir);
 
 /**
  * Event
