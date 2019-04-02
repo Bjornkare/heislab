@@ -1,3 +1,7 @@
+/**
+ *@file
+ *@brief Finite state machine that controls the elevator
+ */
 #inclide <stdio.h>
 #include "fsm.h"
 #include "io.h"
