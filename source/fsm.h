@@ -20,7 +20,6 @@ enum events{
   ORDER
 } event;
 
-
 /**
  * Initialize the state machine to a defined state
  */
@@ -53,3 +52,7 @@ void fsm_evt_stop_button_released();
 bool check_for_stop(int floor, tag_elev_motor_direction dir);
 
 void door_timer();
+
+void add_order(int floor, int button);
+
+void remove_order(int floor, int button);
