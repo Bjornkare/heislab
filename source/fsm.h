@@ -53,3 +53,7 @@ void fsm_evt_stop_button_pressed();
  * Stop button is released
  */
 void fsm_evt_stop_button_released();
+
+bool check_for_stop(int floor, tag_elev_motor_direction dir);
+
+void door_timer();
