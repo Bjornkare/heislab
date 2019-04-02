@@ -6,6 +6,7 @@
 #include "stdio.h"
 
 void door_timer(){
+  elev_set_door_open_lamp(1);
   int wait_time = 3000; //3000 ms = 3 sec
   clock_t start_time = clock();
   clock_t time_diff;
@@ -19,6 +20,14 @@ void door_timer(){
       time_diff = (clock() - start_time) * 1000/CLOCKS_PER_SEC;
 
   } while(time_diff < wait_time);
+  remove_order(floor);
+  elev_set_door_open_lamp(0);
+  if (fsm_data.curr_dir = idle_get_dir()) {
+	  elev_set_motor_direction(fsm_data.curr_dir);
+  }
+  else {
+	  fsm_data.active_orders = state.IDLE;
+  }
 }
 
 void add_order(int floor, elev_button_type_t button, int * orders){
@@ -42,45 +51,46 @@ void fsm_init() {
 		{ 0,0,0 }
 	};
 	fsm_data.active_state = IDLE;
-	int last_floor = 0;
+	int curr_floor = 0;
+	int curr_dir = 0;
 }
 
 int fsm_evt_order(int floor, elev_button_type_t dir) {
-	switch (active_state) {
+	add_order(floor, dir);
+	switch (fsm_data.active_state) {
 	case IDLE:
-		if (last_floor != floor) {
-			add_order(floor, dir, orders);
-			set_motor_direction()
+		if(floor != fsm_data.curr_floor){
+			fsm_data.curr_dir = idle_get_dir()
+			elev_set_motor_direction(fsm_data.curr_dir);
+			fsm_data.active_state = MOVING;
 		}
-	}
+		else {
+			fsm_data.active_state = DOOR_OPEN;
+			door_timer();
+		}
+		break;
+	case MOVING:
+	case DOOR_OPEN:
+		add_order(floor, dir);
+		break;
+	case STOPPED:
+		break;
 }
 
 
 void fsm_evt_floor_sensor(int floor) {
-	last_floor = floor;
+	fsm_data.curr_floor = floor;
 	elev_set_floor_indicator(floor);
-	switch (active_state) {
+	switch (fsm_data.active_state) {
 	case IDLE:
 		break;
-	case MOVING_UP:
-		if (check_for_stop(floor, DIRN_UP)) {
-			remove_order(floor, DIRN_UP, orders)
+	case MOVING:
+		if (check_for_stop(floor, fsm_data.dir)) {
 			elev_set_motor_direction(DIRN_STOP);
-			elev_set_door_open_lamp(1);
 			active_state = state.DOOR_OPEN;
 			door_timer();
 		}
 		break;
-	case MOVING_DOWN:
-		if (check_for_stop(floor, DIRN_DOWN)) {
-			remove_order(floor, DIRN_DOWN, orders);
-			elev_set_motor_direction(DIRN_STOP);
-			elev_set_door_open_lamp(1);
-			active_state = state.DOOR_OPEN;
-			door_timer();
-		}
-		break;
-	}
 	case DOOR_OPEN:
 	case STOPPED:
 		break;

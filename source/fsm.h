@@ -9,8 +9,7 @@
 
 typedef enum states{
   IDLE,
-  MOVING_UP,
-  MOVING_DOWN,
+  MOVING,
   DOOR_OPEN,
   STOPPED
 } state;
