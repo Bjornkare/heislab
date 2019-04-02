@@ -1,3 +1,4 @@
 source/#elev.h#
-html/*
-latex/*
+**/html
+**/latex
+*.o
