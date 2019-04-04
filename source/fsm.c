@@ -35,7 +35,7 @@ void door_timer(fsm_data * data){
 }
 
 fsm_data fsm_init() {
-	fsm_data data;
+    fsm_data data;
     for (int i = 0; i < N_FLOORS; i++){
         for (int j = 0; j < N_BUTTONS; j++){
             data.orders[i][j] = 0;
@@ -45,11 +45,13 @@ fsm_data fsm_init() {
 	data.prev_floor = 0;
 	data.curr_dir = -1;
     elev_set_motor_direction(data.curr_dir);
-	return data;
+
+    return data;
+
 }
 
-void fsm_evt_order(int floor, elev_button_type_t dir, fsm_data * data) {
-	add_order(floor, dir, data);
+void fsm_evt_order(int floor, int button, fsm_data * data) {
+	add_order(floor, button, data);
 	switch (data->active_state) {
 	case IDLE:
 		if(floor != data->prev_floor){
@@ -64,7 +66,7 @@ void fsm_evt_order(int floor, elev_button_type_t dir, fsm_data * data) {
 		break;
 	case MOVING:
 	case DOOR_OPEN:
-		add_order(floor, dir, data);
+		add_order(floor, button, data);
 		break;
     }
 }

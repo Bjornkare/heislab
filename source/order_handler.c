@@ -47,7 +47,7 @@ void delete_all_orders(fsm_data * data) {
 }
 
 bool check_for_stop(int floor, fsm_data * data){
-  return (orders[floor][2] || orders[floor][data->curr_dir]);
+  return (data->orders[floor][2] || data->orders[floor][data->curr_dir]);
 }
 
 
