@@ -1,5 +1,5 @@
 /**
-* @file 
+* @file
 * @brief functions for adding, removing and checking current orders
 */
 
@@ -14,14 +14,20 @@ void add_order(int floor, int button, fsm_data * data);
 
 /**
  *Remove all orders from a floor
- *@param[in] floor floornumber where orders should be deleted 
+ *@param[in] floor floornumber where orders should be deleted
  *@param[in] data pointer to the statemachine data struct
  */
 void remove_order(int floor, fsm_data * data);
 
 /**
+ *Remove all orders from all floors
+ *@param[in] data pointer to the statemachine data struct
+ */
+void delete_all_orders(fsm_data * data);
+
+/**
  *When coming to floor, check if it has orders in current direction
- *@param[in] floor floornumber where orders should be deleted 
+ *@param[in] floor floornumber where orders should be deleted
  *@param[in] data pointer to the statemachine data struct
  *@return stop wheter or not the elevator should stop, 1 = stop, 0 = dont stop
  */

@@ -16,7 +16,7 @@ void door_timer(){
   do{
       if (elev_get_stop_signal()){
         fsm_evt_stop_button_pressed();
-        break;
+        return;
       }
       for (int i = 0; i < N_FLOORS; i++){
         for (int j = 0; j < N_BUTTONS; j++){
@@ -36,7 +36,7 @@ void door_timer(){
 	  elev_set_motor_direction(fsm_data.curr_dir);
   }
   else {
-	  fsm_data.active_orders = state.IDLE;
+	  fsm_data.active_state = state.IDLE;
   }
 }
 
@@ -103,7 +103,7 @@ void fsm_evt_stop_button_pressed(){
 		fsm_data.active_state = state.STOPPED;
 		while (elev_get_stop_signal) {
 		}
-		delete_all_orders();
+		delete_all_orders(data);
 		fsm_data.active_state = state.MOVING;
 		elev_set_motor_direction(fsm_data.curr_dir);
 	}

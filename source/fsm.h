@@ -14,7 +14,7 @@
 typedef struct {
   state active_state;
   int curr_dir;
-  int curr_floor;
+  int prev_floor;
   int orders[N_FLOORS][N_BUTTONS];
 } fsm_data;
 
@@ -25,12 +25,6 @@ typedef enum states{
   STOPPED
 } state;
 
-enum events{
-  FLOOR_SENSOR,
-  STOP_BTN_PRESS,
-  STOP_BTN_RELEASE,
-  ORDER
-} event;
 
 int orders[N_FLOORS][N_BUTTONS];
 int last_floor;
