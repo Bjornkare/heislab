@@ -13,7 +13,6 @@
 * @brief functions for adding, removing and checking current orders
 */
 
-
 /**
  * Set index [floor][button] of order matrix to 1
  *@param[in] floor floornumber where orders should be added
@@ -56,5 +55,6 @@ int check_for_orders(fsm_data * data);
  * 0 if no orders on other floors
  */
 int idle_get_dir(fsm_data * data);
+
 
 bool get_orders_floor(int floor, fsm_data * data);

@@ -37,7 +37,7 @@ fsm_data fsm_init();
  * Event
  * Begin to complete any potential orders
  */
-void fsm_evt_order(int floor, elev_button_type_t dir, fsm_data * data);
+void fsm_evt_order(int floor, int button, fsm_data * data);
 
 /**
  * Event
