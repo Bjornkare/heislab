@@ -18,6 +18,9 @@ int idle_get_dir(fsm_data * data) {
           if (get_orders_floor(i, data)){
 	          return -1; //downwards
           }
+		  for (int i = data->prev_floor; i < N_FLOORS; i++) {
+			  if (get_orders_floor(i, data) && get_orders_floor(i, data) != data->prev_floor) {
+				  return 1; //upwards
         }
     }
     return 0;
