@@ -14,7 +14,17 @@ void door_timer(){
   clock_t start_time = clock();
   clock_t time_diff;
   do{
-
+      if (elev_get_stop_signal()){
+        fsm_evt_stop_button_pressed();
+        break;
+      }
+      for (int i = 0; i < N_FLOORS; i++){
+        for (int j = 0; j < N_BUTTONS; j++){
+          if (elev_get_button(i,j,*fsm_data)){
+            add_order(i,j)
+          }
+        }
+      }
       if ()
 
       time_diff = (clock() - start_time) * 1000/CLOCKS_PER_SEC;
@@ -28,19 +38,6 @@ void door_timer(){
   else {
 	  fsm_data.active_orders = state.IDLE;
   }
-}
-
-void add_order(int floor, elev_button_type_t button, int * orders){
-  orders[floor][button] = 1;
-  elev_set_button_lamp(button, floor, 1);
-}
-
-void remove_order(int floor, elev_button_type_t button, int * orders){
-  &orders[floor][button] = 0;
-  orders[floor][2] = 0;
-
-  elev_set_button_lamp(button, floor, 0);
-  elev_set_button_lamp(BUTTON_CMD, floor, 0);
 }
 
 void fsm_init() {
@@ -95,7 +92,7 @@ void fsm_evt_floor_sensor(int floor) {
 	case STOPPED:
 		break;
 }
-	
+
 void fsm_evt_stop_button_pressed(){
 	elev_set_motor_direction(DIRN_STOP);
 	if (elev_get_floor_sensor_signal() != -1) {
