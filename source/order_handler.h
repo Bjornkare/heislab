@@ -1,8 +1,12 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include "io.h"
 #include "channels.h"
 #include "elev.h"
-#include "stdio.h"
+
+#ifndef fsm_data
+#include "fsm.h"
+#endif
 
 /**
 * @file
@@ -52,3 +56,5 @@ int check_for_orders(fsm_data * data);
  * 0 if no orders on other floors
  */
 int idle_get_dir(fsm_data * data);
+
+bool get_orders_floor(int floor, fsm_data * data);

@@ -7,8 +7,7 @@
 #include "io.h"
 #include "channels.h"
 #include "elev.h"
-#include "stdio.h"
-#include "order_handler.h"
+
 
 typedef enum states{
   IDLE,
@@ -16,7 +15,7 @@ typedef enum states{
   DOOR_OPEN
 } state;
 
-typedef struct {
+typedef struct fsm_data{
   state active_state;
   int curr_dir;
   int prev_floor;
@@ -38,7 +37,7 @@ void fsm_init(fsm_data * data);
  * Event
  * Begin to complete any potential orders
  */
-int fsm_evt_order(int floor, elev_button_type_t dir, fsm_data * data);
+void fsm_evt_order(int floor, elev_button_type_t dir, fsm_data * data);
 
 /**
  * Event
