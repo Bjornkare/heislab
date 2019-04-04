@@ -35,12 +35,13 @@ bool check_for_stop(int floor, elev_button_type_t dir){
   return (orders[floor][2] || orders[floor][data.curr_dir]);
 }
 
-int get_orders_floor{}
-    
+int get_orders_floor{
+}    
 
 
 int check_for_orders(fsm_data * data){
   for (int i = 0; i < N_FLOORS; i++){
     for (int j = 0; j < N_BUTTONS; j++){
       if (&data.orders[i][j])
+	return 1;
 }
