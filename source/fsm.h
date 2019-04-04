@@ -31,7 +31,7 @@ int last_floor;
 /**
  * Initialize the state machine to a defined state
  */
-void fsm_init(fsm_data * data);
+fsm_data fsm_init();
 
 /**
  * Event
