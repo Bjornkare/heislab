@@ -21,14 +21,12 @@ typedef struct {
 typedef enum states{
   IDLE,
   MOVING,
-  DOOR_OPEN,
-  STOPPED
+  DOOR_OPEN
 } state;
 
 enum events{
   FLOOR_SENSOR,
   STOP_BTN_PRESS,
-  STOP_BTN_RELEASE,
   ORDER
 } event;
 
@@ -38,30 +36,25 @@ int last_floor;
 /**
  * Initialize the state machine to a defined state
  */
-void fsm_init();
+void fsm_init(fsm_data * data);
 
 /**
  * Event
  * Begin to complete any potential orders
  */
-int fsm_evt_order(int floor, elev_button_type_t dir);
+int fsm_evt_order(int floor, elev_button_type_t dir, fsm_data * data);
 
 /**
  * Event
  * Reached a floor
  */
-void fsm_evt_floor_sensor();
+void fsm_evt_floor_sensor(fsm_data * data);
 
 /**
  * Event
  * Stop button is pressed
  */
-void fsm_evt_stop_button_pressed();
+void fsm_evt_stop_button_pressed(fsm_data * data);
 
-/**
- * Event
- * Stop button is released
- */
-void fsm_evt_stop_button_released();
 
-void door_timer();
+void door_timer(fsm_data * data);
