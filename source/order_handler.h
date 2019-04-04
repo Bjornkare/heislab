@@ -1,4 +1,4 @@
-#inclide <stdio.h>
+#include <stdio.h>
 #include "io.h"
 #include "channels.h"
 #include "elev.h"

@@ -10,6 +10,12 @@
 #include "stdio.h"
 #include "order_handler.h"
 
+typedef enum states{
+  IDLE,
+  MOVING,
+  DOOR_OPEN
+} state;
+
 typedef struct {
   state active_state;
   int curr_dir;
@@ -17,11 +23,7 @@ typedef struct {
   int orders[N_FLOORS][N_BUTTONS];
 } fsm_data;
 
-typedef enum states{
-  IDLE,
-  MOVING,
-  DOOR_OPEN
-} state;
+
 
 
 int orders[N_FLOORS][N_BUTTONS];
@@ -42,7 +44,7 @@ int fsm_evt_order(int floor, elev_button_type_t dir, fsm_data * data);
  * Event
  * Reached a floor
  */
-void fsm_evt_floor_sensor(fsm_data * data);
+void fsm_evt_floor_sensor(int floor, fsm_data * data);
 
 /**
  * Event
