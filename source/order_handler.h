@@ -1,3 +1,9 @@
+#inclide <stdio.h>
+#include "io.h"
+#include "channels.h"
+#include "elev.h"
+#include "stdio.h"
+
 /**
 * @file
 * @brief functions for adding, removing and checking current orders

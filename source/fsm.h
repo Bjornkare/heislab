@@ -2,14 +2,13 @@
  *@file
  *@brief Finite state machine that controls the elevator
  */
-#inclide <stdio.h>
-#include "fsm.h"
+#include <stdio.h>
+#include <time.h>
 #include "io.h"
 #include "channels.h"
 #include "elev.h"
-#include "timer.h"
 #include "stdio.h"
-#include "order_hander.h"
+#include "order_handler.h"
 
 typedef struct {
   state active_state;

@@ -1,9 +1,4 @@
 #include "fsm.h"
-#include "io.h"
-#include "channels.h"
-#include "elev.h"
-#include "timer.h"
-#include "stdio.h"
 
 void door_timer(fsm_data * data){
   elev_set_door_open_lamp(1);
@@ -21,14 +16,15 @@ void door_timer(fsm_data * data){
           }
         }
       }
-      if ()
-
-      time_diff = (clock() - start_time) * 1000/CLOCKS_PER_SEC;
+      int time_diff = (clock() - start_time) * 1000/CLOCKS_PER_SEC;
 
   } while(time_diff < wait_time);
-  remove_order(floor);
+
+  remove_order(data.prev_floor);
   elev_set_door_open_lamp(0);
-  if (data.curr_dir = idle_get_dir()) {
+
+  data.curr_dir = idle_get_dir(data);
+  if (data.curr_dir) {
 	  elev_set_motor_direction(data.curr_dir);
   }
   else {
