@@ -32,7 +32,7 @@ void door_timer(fsm_data * data){
 	  elev_set_motor_direction(data.curr_dir);
   }
   else {
-	  data.active_orders = state.IDLE;
+	  data.active_state = state.IDLE;
   }
 }
 
@@ -99,4 +99,3 @@ void fsm_evt_stop_button_pressed(fsm_data * data){
 		elev_set_motor_direction(data.curr_dir);
 	}
 }
-

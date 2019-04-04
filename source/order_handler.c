@@ -7,14 +7,14 @@ int idle_get_dir(fsm_data * data) {
 	return 1; //upwards
       }
     }
-    
+
   } else if (data.curr_dir == -1){
     for (int i = 0; i < data.curr_floor; i++){
       if (get_orders_floor(i)){
 	return -1; //downwards
       }
     }
-    
+
   } else return 0; //No orders, or order only on current floor
 }
 
@@ -23,6 +23,8 @@ void add_order(int floor, elev_button_type_t button, fsm_data * data){
   elev_set_button_lamp(button, floor, 1);
 }
 
+
+
 void remove_order(int floor, fsm_data * data){
   for (int i = 0; i < 3; i++){
     data.orders[floor][i] = 0;
@@ -30,13 +32,18 @@ void remove_order(int floor, fsm_data * data){
   }
 }
 
+void delete_all_orders(fsm_data * data) {
+  for (int i = 0; i < N_FLOORS; i++){
+    remove_order(i, data);
+  }
+}
 
 bool check_for_stop(int floor, elev_button_type_t dir){
   return (orders[floor][2] || orders[floor][data.curr_dir]);
 }
 
 int get_orders_floor{
-}    
+}
 
 
 int check_for_orders(fsm_data * data){
@@ -44,4 +51,6 @@ int check_for_orders(fsm_data * data){
     for (int j = 0; j < N_BUTTONS; j++){
       if (&data.orders[i][j])
 	return 1;
+    }
+  }
 }
