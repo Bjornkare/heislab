@@ -2,3 +2,5 @@ source/#elev.h#
 **/html
 **/latex
 *.o
+heis
+source/#fsm.c#
