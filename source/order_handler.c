@@ -47,9 +47,9 @@ void delete_all_orders(fsm_data * data) {
 }
 
 bool check_for_stop(int floor, fsm_data * data){
-  return (data->orders[floor][2] || data->orders[floor][data->curr_dir]);
+    int button = (data->curr_dir == 1) ? 0 : 1;
+    return (data->orders[floor][2] || data->orders[floor][button]);
 }
-
 
 
 int check_for_orders(fsm_data * data){
@@ -62,6 +62,7 @@ int check_for_orders(fsm_data * data){
   }
   return 0;
 }
+
 
 bool get_orders_floor(int floor, fsm_data * data){
     for (int i = 0; i < N_BUTTONS; i++){

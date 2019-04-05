@@ -18,8 +18,13 @@ void door_timer(fsm_data * data){
           }
         }
       }
-      time_diff = (clock() - start_time) * 1000/CLOCKS_PER_SEC;
 
+      if(elev_get_stop_signal()){
+          fsm_evt_stop_button_pressed(data);
+          break;
+      }
+
+      time_diff = (clock() - start_time) * 1000/CLOCKS_PER_SEC;
   } while(time_diff < wait_time);
 
   remove_order(data->prev_floor, data);
@@ -47,7 +52,7 @@ fsm_data fsm_init() {
     data.curr_dir = -1;
     elev_set_motor_direction(data.curr_dir);
 
-    while(elev_get_floor_sensor_signal == -1){
+    while(elev_get_floor_sensor_signal() == -1){
 
     }
     return data;
@@ -109,9 +114,9 @@ void fsm_evt_stop_button_pressed(fsm_data * data){
 		door_timer(data);
 	}
 	else {
-		while (elev_get_stop_signal());
+		while (elev_get_stop_signal()); //Wait until stop button is released.
 		delete_all_orders(data);
-		data->active_state = MOVING;
-		elev_set_motor_direction(data->curr_dir);
+		data->active_state = IDLE;
+		//elev_set_motor_direction(data->curr_dir); ??
 	}
 }

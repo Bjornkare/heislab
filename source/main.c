@@ -24,7 +24,7 @@ int main() {
 		for (int i = 0; i < N_FLOORS; i++) {
 			for (int j = 0; j < N_BUTTONS; j++) {
 				button_signal = elev_get_button_signal(j, i);
-				if (button_signal != data.orders[j][i] && button_signal == 1) {
+				if (button_signal && !data.orders[i][j]) {
 					fsm_evt_order(i, j, &data);
 				}
 			}
@@ -32,6 +32,8 @@ int main() {
 		if (elev_get_stop_signal()) {
 			fsm_evt_stop_button_pressed(&data);
         }
+
+
     }
 
     return 0;
