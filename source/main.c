@@ -1,4 +1,6 @@
 #include "elev.h"
+#include "fsm.h"
+#include "order_handler.h"
 #include <stdio.h>
 
 
@@ -11,20 +13,24 @@ int main() {
 
     printf("Press STOP button to stop elevator and exit program.\n");
 
-    elev_set_motor_direction(DIRN_UP);
+    fsm_data data = fsm_init();
+    int floor, button_signal;
 
     while (1) {
-        // Change direction when we reach top/bottom floor
-        if (elev_get_floor_sensor_signal() == N_FLOORS - 1) {
-            elev_set_motor_direction(DIRN_DOWN);
-        } else if (elev_get_floor_sensor_signal() == 0) {
-            elev_set_motor_direction(DIRN_UP);
-        }
-
-        // Stop elevator and exit program if the stop button is pressed
-        if (elev_get_stop_signal()) {
-            elev_set_motor_direction(DIRN_STOP);
-            break;
+        floor = elev_get_floor_sensor_signal();
+		if (floor != data.prev_floor && floor != -1) {
+			fsm_evt_floor_sensor(floor, &data);
+		}
+		for (int i = 0; i < N_FLOORS; i++) {
+			for (int j = 0; j < N_BUTTONS; j++) {
+				button_signal = elev_get_button_signal(j, i);
+				if (button_signal != data.orders[j][i] && button_signal == 1) {
+					fsm_evt_order(i, j, &data);
+				}
+			}
+		}
+		if (elev_get_stop_signal()) {
+			fsm_evt_stop_button_pressed(&data);
         }
     }
 

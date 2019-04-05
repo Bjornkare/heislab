@@ -1,24 +1,27 @@
 #include "order_handler.h"
 
 int idle_get_dir(fsm_data * data) {
-    if (data->curr_dir == 1){ //Prioritize orders above elevator
-        for (int i = data->prev_floor; i < N_FLOORS; i++){
-            if (get_orders_floor(i, data) && get_orders_floor(i, data) != data->prev_floor){
-	           return 1; //upwards
-        }
-        for (int i = 0; i < data->prev_floor; i++){
-            if (get_orders_floor(i, data)){
-  	             return -1; //downwards
-             }
-         }
+  switch(data->curr_dir){
+  case 1: //Elevator going up
+    for (int i = data->prev_floor; i < N_FLOORS; i++){
+      if (get_orders_floor(i, data) && get_orders_floor(i, data) != data->prev_floor){
+	return 1; //upwards
+      }
+      for (int i = 0; i < data->prev_floor; i++){
+	if (get_orders_floor(i, data)){
+	  return -1; //downwards
+	}
+      }
     }
+    break;
 
-    }else if (data->curr_dir == -1){
-        for (int i = 0; i < data->prev_floor; i++){
-          if (get_orders_floor(i, data)){
-	          return -1; //downwards
-          }
-        }
+  case 2:
+    for (int i = 0; i < data->prev_floor; i++){
+      if (get_orders_floor(i, data)){
+	return -1; //downwards
+      }
+
+    }
     }
     return 0;
 }
@@ -44,7 +47,7 @@ void delete_all_orders(fsm_data * data) {
 }
 
 bool check_for_stop(int floor, fsm_data * data){
-  return (orders[floor][2] || orders[floor][data->curr_dir]);
+  return (data->orders[floor][2] || data->orders[floor][data->curr_dir]);
 }
 
 

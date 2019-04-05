@@ -2,6 +2,8 @@
  *@file
  *@brief Finite state machine that controls the elevator
  */
+#pragma once
+
 #include <stdio.h>
 #include <time.h>
 #include "io.h"
@@ -23,15 +25,10 @@ typedef struct fsm_data{
 } fsm_data;
 
 
-
-
-int orders[N_FLOORS][N_BUTTONS];
-int last_floor;
-
 /**
  * Initialize the state machine to a defined state
  */
-void fsm_init(fsm_data * data);
+fsm_data fsm_init();
 
 /**
  * Event
