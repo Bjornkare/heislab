@@ -5,57 +5,59 @@
 void door_timer(fsm_data * data){
   elev_set_door_open_lamp(1);
   while (elev_get_stop_signal()) {
-	  delete_all_orders(data);
+    delete_all_orders(data);
   };
   int wait_time = 3000; //3000 ms = 3 sec
   clock_t start_time = clock();
   clock_t time_diff;
   do{
-      for (int i = 0; i < N_FLOORS; i++){
-        for (int j = 0; j < N_BUTTONS; j++){
-          if (elev_get_button_signal(i,j)){
-			  add_order(i, j, data);
-          }
-        }
+    for (int i = 0; i < N_FLOORS; i++){
+      for (int j = 0; j < N_BUTTONS; j++){
+	if (elev_get_button_signal(j,i)){
+	  add_order(i, j, data);
+	}
       }
-
-      if(elev_get_stop_signal()){
-          fsm_evt_stop_button_pressed(data);
-          break;
-      }
-
-      time_diff = (clock() - start_time) * 1000/CLOCKS_PER_SEC;
+    }
+    
+    if(elev_get_stop_signal()){
+      fsm_evt_stop_button_pressed(data);
+      break;
+    }
+    
+    time_diff = (clock() - start_time) * 1000/CLOCKS_PER_SEC;
   } while(time_diff < wait_time);
-
+  
   remove_order(data->prev_floor, data);
   elev_set_door_open_lamp(0);
-
+  
   data->curr_dir = idle_get_dir(data);
   if (data->curr_dir) {
-	  elev_set_motor_direction(data->curr_dir);
+    elev_set_motor_direction(data->curr_dir);
   }
   else {
-	  data->active_state = IDLE;
+    data->active_state = IDLE;
   }
 }
 
 
 fsm_data fsm_init() {
-    fsm_data data;
-    for (int i = 0; i < N_FLOORS; i++){
-        for (int j = 0; j < N_BUTTONS; j++){
-            data.orders[i][j] = 0;
-        }
+  fsm_data data;
+  for (int i = 0; i < N_FLOORS; i++){
+    for (int j = 0; j < N_BUTTONS; j++){
+      data.orders[i][j] = 0;
     }
-    data.active_state = MOVING;
-    data.prev_floor = 0;
-    data.curr_dir = -1;
-    elev_set_motor_direction(data.curr_dir);
-
-    while(elev_get_floor_sensor_signal() == -1){
-
-    }
-    return data;
+  }
+  data.active_state = MOVING;
+  data.prev_floor = -1;
+  data.curr_dir = -1;
+  elev_set_motor_direction(data.curr_dir);
+  
+  while(elev_get_floor_sensor_signal() == -1);
+  elev_set_motor_direction(0);
+  data.prev_floor = elev_get_floor_sensor_signal();
+  data.active_state = IDLE;
+  
+  return data;
 }
 
 
@@ -83,28 +85,28 @@ void fsm_evt_order(int floor, elev_button_type_t dir, fsm_data * data) {
 
 
 void fsm_evt_floor_sensor(int floor, fsm_data * data) {
-	data->prev_floor = floor;
-	elev_set_floor_indicator(floor);
-	switch (data->active_state) {
-	case IDLE:
-		break;
-	case MOVING:
-        data->prev_floor = floor;
-		if (check_for_stop(floor, data)) {
-			elev_set_motor_direction(DIRN_STOP);
-			data->active_state = DOOR_OPEN;
-			door_timer(data);
-		} else if (!check_for_orders(data)){
-            data->active_state = IDLE;
-            elev_set_motor_direction(DIRN_STOP);
-        }else if (floor == 0 || floor == (N_FLOORS - 1)){
-            data->curr_dir = -(data->curr_dir);
-            elev_set_motor_direction(data->curr_dir);
-        }
-		break;
-	case DOOR_OPEN:
-        break;
+  data->prev_floor = floor;
+  elev_set_floor_indicator(floor);
+  switch (data->active_state) {
+  case IDLE:
+    break;
+  case MOVING:
+    data->prev_floor = floor;
+    if (check_for_stop(floor, data)) {
+      elev_set_motor_direction(DIRN_STOP);
+      data->active_state = DOOR_OPEN;
+      door_timer(data);
+    } else if (!check_for_orders(data)){
+      data->active_state = IDLE;
+      elev_set_motor_direction(DIRN_STOP);
+    }else if (floor == 0 || floor == (N_FLOORS - 1)){
+      data->curr_dir = -(data->curr_dir);
+      elev_set_motor_direction(data->curr_dir);
     }
+    break;
+  case DOOR_OPEN:
+    break;
+  }
 }
 
 void fsm_evt_stop_button_pressed(fsm_data * data){
