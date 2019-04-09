@@ -8,7 +8,7 @@ void door_timer(fsm_data * data){
   while (elev_get_stop_signal()) {
     delete_all_orders(data);
   };
-  int wait_time = 1000; //3000 ms = 3 sec
+  int wait_time = 3000; //3000 ms = 3 sec
   clock_t start_time = clock();
   clock_t time_diff;
   do{

@@ -41,12 +41,14 @@ void delete_all_orders(fsm_data * data);
  *When coming to floor, check if it has orders in current direction
  *@param[in] floor floornumber where orders should be deleted
  *@param[in] data pointer to the statemachine data struct
- *@return stop wheter or not the elevator should stop, 1 = stop, 0 = dont stop
+ *@return 1 if the elevator should stop, 0 = if not
  */
 int check_for_stop(int floor, fsm_data * data);
 
 /**
+ *Check if there are any current orders on any floor
  *@param[in] data pointer to the statemachine data struct
+ *@return 1 if there are orders, 0 if not
  */
 int check_for_orders(fsm_data * data);
 
@@ -59,8 +61,26 @@ int check_for_orders(fsm_data * data);
  */
 int idle_get_dir(fsm_data * data);
 
+/**
+ *Check if there are any orders on a given floor
+ *@param[in] floor floor to check orders on
+ *@param[in] data pointer to the statemachine data struct
+ *@return 1 if there are orders on the floor, 0 if not
+ */
 int get_orders_floor(int floor, fsm_data * data);
 
+/**
+ *Check if there are any orders below a given floor
+ *@param[in] floor floor to check orders above
+ *@param[in] data pointer to the statemachine data struct
+ *@return 1 if there are orders above floor, 0 if no orders above
+ */
 int get_orders_above(int floor, fsm_data* data);
 
+/**
+ *Check if there are any orders below a given floor
+ *@param[in] floor floor to check orders below
+ *@param[in] data pointer to the statemachine data struct
+ *@return 1 if there are orders below floor, 0 if no orders below floor
+ */
 int get_orders_below(int floor, fsm_data * data);
