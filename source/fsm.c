@@ -3,17 +3,18 @@
 
 
 void door_timer(fsm_data * data){
+  elev_set_motor_direction(0);
   elev_set_door_open_lamp(1);
   while (elev_get_stop_signal()) {
     delete_all_orders(data);
   };
-  int wait_time = 3000; //3000 ms = 3 sec
+  int wait_time = 1000; //3000 ms = 3 sec
   clock_t start_time = clock();
   clock_t time_diff;
   do{
     for (int i = 0; i < N_FLOORS; i++){
       for (int j = 0; j < N_BUTTONS; j++){
-	if (elev_get_button_signal(j,i)){
+	if (elev_get_button_signal(j,i) && !data->orders[i][j]){
 	  add_order(i, j, data);
 	}
       }
@@ -31,7 +32,8 @@ void door_timer(fsm_data * data){
   elev_set_door_open_lamp(0);
   
   data->curr_dir = idle_get_dir(data);
-  if (data->curr_dir) {
+  if (data->curr_dir != 0) {
+    data->active_state = MOVING;
     elev_set_motor_direction(data->curr_dir);
   }
   else {
@@ -56,6 +58,7 @@ fsm_data fsm_init() {
   elev_set_motor_direction(0);
   data.prev_floor = elev_get_floor_sensor_signal();
   data.active_state = IDLE;
+  elev_set_floor_indicator(data.prev_floor);
   
   return data;
 }
@@ -88,10 +91,7 @@ void fsm_evt_floor_sensor(int floor, fsm_data * data) {
   data->prev_floor = floor;
   elev_set_floor_indicator(floor);
   switch (data->active_state) {
-  case IDLE:
-    break;
   case MOVING:
-    data->prev_floor = floor;
     if (check_for_stop(floor, data)) {
       elev_set_motor_direction(DIRN_STOP);
       data->active_state = DOOR_OPEN;
@@ -99,12 +99,13 @@ void fsm_evt_floor_sensor(int floor, fsm_data * data) {
     } else if (!check_for_orders(data)){
       data->active_state = IDLE;
       elev_set_motor_direction(DIRN_STOP);
-    }else if (floor == 0 || floor == (N_FLOORS - 1)){
+    } if (floor == 0 || floor == (N_FLOORS - 1)){
       data->curr_dir = -(data->curr_dir);
       elev_set_motor_direction(data->curr_dir);
     }
     break;
   case DOOR_OPEN:
+  case IDLE:
     break;
   }
 }

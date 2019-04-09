@@ -43,7 +43,7 @@ void delete_all_orders(fsm_data * data);
  *@param[in] data pointer to the statemachine data struct
  *@return stop wheter or not the elevator should stop, 1 = stop, 0 = dont stop
  */
-bool check_for_stop(int floor, fsm_data * data);
+int check_for_stop(int floor, fsm_data * data);
 
 /**
  *@param[in] data pointer to the statemachine data struct
@@ -59,4 +59,4 @@ int check_for_orders(fsm_data * data);
  */
 int idle_get_dir(fsm_data * data);
 
-bool get_orders_floor(int floor, fsm_data * data);
+int get_orders_floor(int floor, fsm_data * data);
