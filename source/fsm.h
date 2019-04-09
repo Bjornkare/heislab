@@ -1,4 +1,5 @@
- /**
+#pragma once 
+/**
  *@file
  *@brief Finite state machine that controls the elevator
  */
