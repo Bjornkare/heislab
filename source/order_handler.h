@@ -60,3 +60,7 @@ int check_for_orders(fsm_data * data);
 int idle_get_dir(fsm_data * data);
 
 int get_orders_floor(int floor, fsm_data * data);
+
+int get_orders_above(int floor, fsm_data* data);
+
+int get_orders_below(int floor, fsm_data * data);
