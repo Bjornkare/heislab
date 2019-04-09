@@ -6,8 +6,10 @@ int idle_get_dir(fsm_data * data) {
   case 1: //Current direction upwards
     if (get_orders_above(data->prev_floor,data)){
       return 1; //upwards
+	  break;
     }else if (get_orders_below(data->prev_floor,data)){
       return -1; //downwards
+	  break;
     }
     break;
     
