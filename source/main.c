@@ -33,6 +33,11 @@ int main() {
       fsm_evt_stop_button_pressed(&data);
     }
   }
-  
+
+  if (data.active_state == IDLE){
+    data.curr_dir = idle_get_dir(&data);
+    elev_set_motor_direction(data.curr_dir);
+  }
+    
   return 0;
 }

@@ -4,7 +4,7 @@ int idle_get_dir(fsm_data * data) {
   switch(data->curr_dir){
   case 0: //Currently no direction set, default to checking above current position
   case 1: //Current direction upwards
-    if (get_orders_above(data->prev_floor,data)){
+    if (get_orders_above(data->prev_floor,data) || get_orders_floor(data->prev_floor,data)){
       return 1; //upwards
     }else if (get_orders_below(data->prev_floor,data)){
       return -1; //downwards
@@ -12,7 +12,7 @@ int idle_get_dir(fsm_data * data) {
     break;
     
   case -1: //Current direction downwards
-    if (get_orders_below(data->prev_floor,data)){
+    if (get_orders_below(data->prev_floor,data) || get_orders_floor(data->prev_floor,data)){
       return -1;
     }else if (get_orders_above(data->prev_floor,data)){
       return 1;
@@ -94,7 +94,7 @@ int get_orders_above(int floor, fsm_data * data){
 
 int get_orders_below(int floor, fsm_data* data) {
   for (int i = 0; i < floor; i++){
-    if (get_orders_floor(floor,data)){
+    if (get_orders_floor(i,data)){
 	return 1;
       }
   }
