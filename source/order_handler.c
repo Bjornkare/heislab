@@ -10,7 +10,7 @@ int idle_get_dir(fsm_data * data) {
       return -1; //downwards
     }
     break;
-    
+
   case -1: //Current direction downwards
     if (get_orders_below(data->prev_floor,data) || get_orders_floor(data->prev_floor,data)){
       return -1;
@@ -19,7 +19,7 @@ int idle_get_dir(fsm_data * data) {
     }
     break;
   }
-  
+
   return 0; //No order, or only orders on current floor
 }
 
@@ -33,7 +33,9 @@ void add_order(int floor, int button, fsm_data * data){
 void remove_order(int floor, fsm_data * data){
   for (int i = 0; i < 3; i++){
     data->orders[floor][i] = 0;
-    elev_set_button_lamp(i, floor, 0);
+    if (!((floor == 0 && i == 1) || (floor == 3 && i == 0))){
+      elev_set_button_lamp(i, floor, 0);
+    }
   }
 }
 
@@ -89,7 +91,7 @@ int get_orders_above(int floor, fsm_data * data){
       return 1;
     }
   }
-  return 0;   
+  return 0;
 }
 
 int get_orders_below(int floor, fsm_data* data) {

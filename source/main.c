@@ -10,9 +10,7 @@ int main() {
     printf("Unable to initialize elevator hardware!\n");
     return 1;
   }
-  
-  printf("Press STOP button to stop elevator and exit program.\n");
-  
+
   fsm_data data = fsm_init();
   int floor, button_signal;
   
@@ -23,9 +21,11 @@ int main() {
     }
     for (int i = 0; i < N_FLOORS; i++) {
       for (int j = 0; j < N_BUTTONS; j++) {
-	button_signal = elev_get_button_signal(j, i);
-	if (button_signal && !data.orders[i][j]) {
-	  fsm_evt_order(i, j, &data);
+	if(!((i == 0 && j == 1) || (i == 3 && j == 0))){
+	  button_signal = elev_get_button_signal(j, i);
+	  if (button_signal && !data.orders[i][j]) {
+	    fsm_evt_order(i, j, &data);
+	  }
 	}
       }
     }
@@ -33,11 +33,11 @@ int main() {
       fsm_evt_stop_button_pressed(&data);
     }
   }
-
+  
   if (data.active_state == IDLE){
     data.curr_dir = idle_get_dir(&data);
     elev_set_motor_direction(data.curr_dir);
   }
-    
+  
   return 0;
 }
