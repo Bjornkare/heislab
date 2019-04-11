@@ -73,14 +73,23 @@ void fsm_evt_order(int floor, elev_button_type_t dir, fsm_data * data) {
   case IDLE:
     if(floor != data->prev_floor){
       if (floor > data->prev_floor){
-	data->curr_dir = 1;
+	       data->curr_dir = 1;
       }else{
-	data->curr_dir = -1;
+	       data->curr_dir = -1;
       }
       elev_set_motor_direction(data->curr_dir);
       data->active_state = MOVING;
     }
-    else {
+    else if (elev_get_floor_sensor_signal() != -1 ){
+      data->active_state = DOOR_OPEN;
+      fsm_door_timer(data);
+    }
+    else{
+      data->curr_dir = - data->curr_dir;
+      elev_set_motor_direction(data->curr_dir);
+      data->active_state = MOVING;
+      while (elev_get_floor_sensor_signal() == -1 );
+
       data->active_state = DOOR_OPEN;
       fsm_door_timer(data);
     }
