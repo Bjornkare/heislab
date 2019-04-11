@@ -15,7 +15,7 @@ void fsm_door_timer(fsm_data * data){
   do{
     for (int i = 0; i < N_FLOORS; i++){
       for (int j = 0; j < N_BUTTONS; j++){
-	if(!((i == 0 && j == 1) || (i == 3 && j == 0) || (i == data->prev_floor))){
+	if ( !((i == 0 && j == 1) || (i == 3 && j == 0) || (i == data->prev_floor))){
 	  if (elev_get_button_signal(j,i) && !data->orders[i][j]){
 	    oh_add_order(i, j, data);
 	  }
