@@ -22,20 +22,20 @@
  *@param[in] button which button on the floor. 0 =up, 1 = down and 2 = internal commmand
  *@param[in] data pointer to the statemachine data struct
  */
-void add_order(int floor, int button, fsm_data * data);
+void oh_add_order(int floor, int button, fsm_data * data);
 
 /**
  *Remove all orders from a floor
  *@param[in] floor floornumber where orders should be deleted
  *@param[in] data pointer to the statemachine data struct
  */
-void remove_order(int floor, fsm_data * data);
+void oh_delete_order(int floor, fsm_data * data);
 
 /**
  *Remove all orders from all floors
  *@param[in] data pointer to the statemachine data struct
  */
-void delete_all_orders(fsm_data * data);
+void oh_delete_all_orders(fsm_data * data);
 
 /**
  *When coming to floor, check if it has orders in current direction
@@ -43,14 +43,14 @@ void delete_all_orders(fsm_data * data);
  *@param[in] data pointer to the statemachine data struct
  *@return 1 if the elevator should stop, 0 = if not
  */
-int check_for_stop(int floor, fsm_data * data);
+int oh_check_for_stop(int floor, fsm_data * data);
 
 /**
  *Check if there are any current orders on any floor
  *@param[in] data pointer to the statemachine data struct
  *@return 1 if there are orders, 0 if not
  */
-int check_for_orders(fsm_data * data);
+int oh_check_for_orders(fsm_data * data);
 
 
 /**
@@ -59,7 +59,7 @@ int check_for_orders(fsm_data * data);
  *@return 1 if elevator should go up, -1 if elevator should go down,
  * 0 if no orders on other floors
  */
-int idle_get_dir(fsm_data * data);
+int oh_get_direction(fsm_data * data);
 
 /**
  *Check if there are any orders on a given floor
@@ -67,7 +67,7 @@ int idle_get_dir(fsm_data * data);
  *@param[in] data pointer to the statemachine data struct
  *@return 1 if there are orders on the floor, 0 if not
  */
-int get_orders_floor(int floor, fsm_data * data);
+int oh_get_orders_floor(int floor, fsm_data * data);
 
 /**
  *Check if there are any orders below a given floor
@@ -75,7 +75,7 @@ int get_orders_floor(int floor, fsm_data * data);
  *@param[in] data pointer to the statemachine data struct
  *@return 1 if there are orders above floor, 0 if no orders above
  */
-int get_orders_above(int floor, fsm_data* data);
+int oh_get_orders_above(int floor, fsm_data* data);
 
 /**
  *Check if there are any orders below a given floor
@@ -83,4 +83,4 @@ int get_orders_above(int floor, fsm_data* data);
  *@param[in] data pointer to the statemachine data struct
  *@return 1 if there are orders below floor, 0 if no orders below floor
  */
-int get_orders_below(int floor, fsm_data * data);
+int oh_get_orders_below(int floor, fsm_data * data);

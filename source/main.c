@@ -13,7 +13,7 @@ int main() {
 
   fsm_data data = fsm_init();
   int floor, button_signal;
-  
+
   while (1) {
     floor = elev_get_floor_sensor_signal();
     if (floor != data.prev_floor && floor != -1) {
@@ -33,11 +33,11 @@ int main() {
       fsm_evt_stop_button_pressed(&data);
     }
   }
-  
+
   if (data.active_state == IDLE){
-    data.curr_dir = idle_get_dir(&data);
+    data.curr_dir = oh_get_direction(&data);
     elev_set_motor_direction(data.curr_dir);
   }
-  
+
   return 0;
 }

@@ -69,4 +69,4 @@ void fsm_evt_stop_button_pressed(fsm_data * data);
  * Keeps time of how long the door should stay open
  * @param data pointer to the fsm_data struct
  */
-void door_timer(fsm_data * data);
+void fsm_door_timer(fsm_data * data);
