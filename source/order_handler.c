@@ -1,20 +1,21 @@
 #include "order_handler.h"
 
 int oh_get_direction(fsm_data * data) {
+  int floor = data->prev_floor;
   switch(data->curr_dir){
   case 0: //Currently no direction set, default to checking above current position
   case 1: //Current direction upwards
-    if (oh_get_orders_above(data->prev_floor,data) || oh_get_orders_floor(data->prev_floor,data)){
+    if (oh_get_orders_above(floor,data) || oh_get_orders_floor(floor,data)){
       return 1; //upwards
-  }else if (oh_get_orders_below(data->prev_floor,data)){
+  }else if (oh_get_orders_below(floor,data)){
       return -1; //downwards
     }
     break;
 
   case -1: //Current direction downwards
-    if (oh_get_orders_below(data->prev_floor,data) || oh_get_orders_floor(data->prev_floor,data)){
+    if (oh_get_orders_below(floor,data) || oh_get_orders_floor(floor,data)){
       return -1;
-  }else if (oh_get_orders_above(data->prev_floor,data)){
+  }else if (oh_get_orders_above(floor,data)){
       return 1;
     }
     break;

@@ -3,38 +3,36 @@
 
 
 void fsm_door_timer(fsm_data * data){
+  int floor = data->prev_floor;
   elev_set_motor_direction(0);
   elev_set_door_open_lamp(1);
-  oh_delete_order(data->prev_floor, data);
-  while (elev_get_stop_signal()) {
-    oh_delete_all_orders(data);
-  };
+  oh_delete_order(floor, data);
+
   int wait_time = 3000; //3000 ms = 3 sec
   clock_t start_time = clock();
   clock_t time_diff;
   do{
     for (int i = 0; i < N_FLOORS; i++){
       for (int j = 0; j < N_BUTTONS; j++){
-	if ( !((i == 0 && j == 1) || (i == 3 && j == 0) || (i == data->prev_floor))){
-	  //Don't add orders to nonexistant buttons
+	if ( !((i == 0 && j == 1) || (i == N_FLOORS-1 && j == 0) || (i == floor))){
+	  //Don't check orders from nonexistant buttons, and don't add orders from current floors
 	  if (elev_get_button_signal(j,i) && !data->orders[i][j]){
 	    oh_add_order(i, j, data);
 	  }
 	}
       }
     }
-
+    
     if(elev_get_stop_signal()){
       fsm_evt_stop_button_pressed(data);
       break;
     }
-
+    
     time_diff = (clock() - start_time) * 1000/CLOCKS_PER_SEC;
   } while(time_diff < wait_time);
-
-  oh_delete_order(data->prev_floor, data);
+  
+  oh_delete_order(floor, data);
   elev_set_door_open_lamp(0);
-
   data->active_state = IDLE;
 
   if (oh_check_for_orders(data)) {
@@ -87,6 +85,7 @@ void fsm_evt_order(int floor, elev_button_type_t dir, fsm_data * data) {
       fsm_door_timer(data);
     }
     break;
+    
   case MOVING:
   case DOOR_OPEN:
     oh_add_order(floor, dir, data);
@@ -112,6 +111,7 @@ void fsm_evt_floor_sensor(int floor, fsm_data * data) {
       elev_set_motor_direction(data->curr_dir);
     }
     break;
+    
   case DOOR_OPEN:
   case IDLE:
     break;
@@ -130,11 +130,10 @@ void fsm_evt_stop_button_pressed(fsm_data * data){
     while (elev_get_stop_signal()); //Wait until stop button is released.
     elev_set_stop_lamp(0);
     fsm_door_timer(data);
-  }
-  else {
+    
+  } else {
     while (elev_get_stop_signal()); //Wait until stop button is released.
     elev_set_stop_lamp(0);
     data->active_state = IDLE;
-    //elev_set_motor_direction(data->curr_dir); ??
   }
 }
