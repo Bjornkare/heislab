@@ -16,6 +16,7 @@ void fsm_door_timer(fsm_data * data){
     for (int i = 0; i < N_FLOORS; i++){
       for (int j = 0; j < N_BUTTONS; j++){
 	if ( !((i == 0 && j == 1) || (i == 3 && j == 0) || (i == data->prev_floor))){
+	  //Don't add orders to nonexistant buttons
 	  if (elev_get_button_signal(j,i) && !data->orders[i][j]){
 	    oh_add_order(i, j, data);
 	  }
@@ -68,7 +69,6 @@ fsm_data fsm_init() {
 }
 
 
-
 void fsm_evt_order(int floor, elev_button_type_t dir, fsm_data * data) {
   oh_add_order(floor, dir, data);
   switch (data->active_state) {
@@ -117,6 +117,7 @@ void fsm_evt_floor_sensor(int floor, fsm_data * data) {
     break;
   }
 }
+
 
 void fsm_evt_stop_button_pressed(fsm_data * data){
   elev_set_stop_lamp(1);
