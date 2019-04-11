@@ -121,6 +121,7 @@ void fsm_evt_floor_sensor(int floor, fsm_data * data) {
 void fsm_evt_stop_button_pressed(fsm_data * data){
   elev_set_stop_lamp(1);
   elev_set_motor_direction(DIRN_STOP);
+  oh_delete_all_orders(data);
 
   if (elev_get_floor_sensor_signal() != -1) {
     data->active_state = DOOR_OPEN;
@@ -131,7 +132,6 @@ void fsm_evt_stop_button_pressed(fsm_data * data){
   }
   else {
     while (elev_get_stop_signal()); //Wait until stop button is released.
-    oh_delete_all_orders(data);
     elev_set_stop_lamp(0);
     data->active_state = IDLE;
     //elev_set_motor_direction(data->curr_dir); ??
