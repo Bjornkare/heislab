@@ -42,7 +42,7 @@ void oh_delete_orders_floor(int floor, fsm_data * data){
 
 void oh_delete_all_orders(fsm_data * data) {
   for (int i = 0; i < N_FLOORS; i++){
-    oh_delete_order(i, data);
+    oh_delete_orders_floor(i, data);
   }
 }
 
