@@ -88,8 +88,21 @@ void fsm_evt_order(int floor, elev_button_type_t dir, fsm_data * data) {
       data->curr_dir = -data->curr_dir;
       elev_set_motor_direction(data->curr_dir);
       data->active_state = MOVING;
-      while (elev_get_floor_sensor_signal() == -1 );
-
+      
+      while (elev_get_floor_sensor_signal() == -1 ){ //Moving to floor with order
+	for (int i = 0; i < N_FLOORS; i++){
+	  for (int j = 0; j < N_BUTTONS; j++){
+	    if(!((i == 0 && j == 1) || (i == 3 && j == 0))){
+	      oh_add_order(i,j,data);
+	    }
+	  }
+	}
+	if(elev_get_stop_signal()){
+	  fsm_evt_stop_button_pressed(data);
+	  break;
+	}
+      }
+      
       data->active_state = DOOR_OPEN;
       fsm_door_timer(data);
     }
