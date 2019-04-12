@@ -31,7 +31,7 @@ void oh_add_order(int floor, int button, fsm_data * data){
 }
 
 
-void oh_delete_order(int floor, fsm_data * data){
+void oh_delete_orders_floor(int floor, fsm_data * data){
   for (int i = 0; i < 3; i++){
     data->orders[floor][i] = 0;
     if (!((floor == 0 && i == 1) || (floor == 3 && i == 0))){
@@ -39,7 +39,6 @@ void oh_delete_order(int floor, fsm_data * data){
     }
   }
 }
-
 
 void oh_delete_all_orders(fsm_data * data) {
   for (int i = 0; i < N_FLOORS; i++){

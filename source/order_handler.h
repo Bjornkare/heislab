@@ -29,7 +29,7 @@ void oh_add_order(int floor, int button, fsm_data * data);
  *@param[in] floor floornumber where orders should be deleted
  *@param[in] data pointer to the statemachine data struct
  */
-void oh_delete_order(int floor, fsm_data * data);
+void oh_delete_orders_floor(int floor, fsm_data * data);
 
 /**
  *Remove all orders from all floors
@@ -38,8 +38,8 @@ void oh_delete_order(int floor, fsm_data * data);
 void oh_delete_all_orders(fsm_data * data);
 
 /**
- *When coming to floor, check if it has orders in current direction
- *@param[in] floor floornumber where orders should be deleted
+ *When coming to floor, check if it has orders in current direction and should stop
+ *@param[in] floor index of floor elevator has arrived on
  *@param[in] data pointer to the statemachine data struct
  *@return 1 if the elevator should stop, 0 = if not
  */

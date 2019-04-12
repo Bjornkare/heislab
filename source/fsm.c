@@ -6,7 +6,7 @@ void fsm_door_timer(fsm_data * data){
   int floor = data->prev_floor;
   elev_set_motor_direction(0);
   elev_set_door_open_lamp(1);
-  oh_delete_order(floor, data);
+  oh_delete_orders_floor(floor, data);
 
   int wait_time = 3000; //3000 ms = 3 sec
   clock_t start_time = clock();
@@ -31,7 +31,7 @@ void fsm_door_timer(fsm_data * data){
     time_diff = (clock() - start_time) * 1000/CLOCKS_PER_SEC;
   } while(time_diff < wait_time);
   
-  oh_delete_order(floor, data);
+  oh_delete_orders_floor(floor, data);
   elev_set_door_open_lamp(0);
   data->active_state = IDLE;
 
