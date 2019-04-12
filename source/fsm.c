@@ -93,7 +93,9 @@ void fsm_evt_order(int floor, elev_button_type_t dir, fsm_data * data) {
 	for (int i = 0; i < N_FLOORS; i++){
 	  for (int j = 0; j < N_BUTTONS; j++){
 	    if(!((i == 0 && j == 1) || (i == 3 && j == 0))){
-	      oh_add_order(i,j,data);
+	      if (elev_get_button_signal(j,i)){
+		oh_add_order(i,j,data);
+	      }
 	    }
 	  }
 	}
