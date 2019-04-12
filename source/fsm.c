@@ -14,11 +14,11 @@ void fsm_door_timer(fsm_data * data){
   do{
     for (int i = 0; i < N_FLOORS; i++){
       for (int j = 0; j < N_BUTTONS; j++){
-	if ( !((i == 0 && j == 1) || (i == N_FLOORS-1 && j == 0) || (i == floor))){
-	  //Don't check orders from nonexistant buttons, and don't add orders from current floors
-	  if (elev_get_button_signal(j,i) && !data->orders[i][j]){
-	    oh_add_order(i, j, data);
-	  }
+	if ((i == 0 && j == 1) || (i == N_FLOORS-1 && j == 0) || (i == floor)){ 
+	  continue; //Don't check orders from nonexistant buttons, and don't add orders from current floors
+	}
+	if (elev_get_button_signal(j,i) && !data->orders[i][j]){
+	  oh_add_order(i, j, data);
 	}
       }
     }
@@ -85,7 +85,7 @@ void fsm_evt_order(int floor, elev_button_type_t dir, fsm_data * data) {
       fsm_door_timer(data);
     }
     else{ //Order on previous floor, but elevator between floors.
-      data->curr_dir = - data->curr_dir;
+      data->curr_dir = -data->curr_dir;
       elev_set_motor_direction(data->curr_dir);
       data->active_state = MOVING;
       while (elev_get_floor_sensor_signal() == -1 );
@@ -133,14 +133,14 @@ void fsm_evt_stop_button_pressed(fsm_data * data){
   elev_set_motor_direction(DIRN_STOP);
   oh_delete_all_orders(data);
 
-  if (elev_get_floor_sensor_signal() != -1) {
+  if (elev_get_floor_sensor_signal() != -1) { //Elevator currently on a floor
     data->active_state = DOOR_OPEN;
     elev_set_door_open_lamp(1);
     while (elev_get_stop_signal()); //Wait until stop button is released.
     elev_set_stop_lamp(0);
     fsm_door_timer(data);
     
-  } else {
+  } else { //elevator between two floors
     while (elev_get_stop_signal()); //Wait until stop button is released.
     elev_set_stop_lamp(0);
     data->active_state = IDLE;
