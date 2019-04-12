@@ -84,7 +84,7 @@ void fsm_evt_order(int floor, elev_button_type_t dir, fsm_data * data) {
       data->active_state = DOOR_OPEN;
       fsm_door_timer(data);
     }
-    else{
+    else{ //Order on previous floor, but elevator between floors.
       data->curr_dir = - data->curr_dir;
       elev_set_motor_direction(data->curr_dir);
       data->active_state = MOVING;
@@ -112,7 +112,7 @@ void fsm_evt_floor_sensor(int floor, fsm_data * data) {
       elev_set_motor_direction(DIRN_STOP);
       data->active_state = DOOR_OPEN;
       fsm_door_timer(data);
-  } else if (!oh_check_for_orders(data)){
+    } else if (!oh_check_for_orders(data)){
       data->active_state = IDLE;
       elev_set_motor_direction(DIRN_STOP);
     } else if (floor == 0 || floor == (N_FLOORS - 1)){
